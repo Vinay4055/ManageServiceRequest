@@ -1,7 +1,5 @@
 package com.nagarro.manageServiceRequest.entity;
 
-import java.util.Date;
-
 import javax.validation.constraints.NotEmpty;
 
 import com.nagarro.manageServiceRequest.common.ServiceRequestStatus;
@@ -11,8 +9,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ServiceRequest {
-	@NotEmpty(message = "ServiceID is Mandatory")
+	@NotEmpty(message = "ServiceRequestId is Mandatory")
 	String id;
+	@NotEmpty(message = "ServiceId is Mandatory")
+	String serviceId;
 	@NotEmpty(message = "Service Date is Mandatory")
 	String date;
 	@NotEmpty(message = "Service Receiver is Mandatory")
