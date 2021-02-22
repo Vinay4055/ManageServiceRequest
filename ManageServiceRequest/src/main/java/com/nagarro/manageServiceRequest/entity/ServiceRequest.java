@@ -14,7 +14,7 @@ public class ServiceRequest {
 	@NotEmpty(message = "ServiceID is Mandatory")
 	String id;
 	@NotEmpty(message = "Service Date is Mandatory")
-	Date date;
+	String date;
 	@NotEmpty(message = "Service Receiver is Mandatory")
 	String emailIdOfServiceReceiver;
 	String emailIdOfServiceProvider;

@@ -13,7 +13,7 @@ import lombok.Setter;
 public class ServiceRequest {
 	String id;
 	@NotEmpty(message = "Service Date is Mandatory")
-	Date date;
+	String date;
 	@NotEmpty(message = "Service Receiver is Mandatory")
 	String emailIdOfServiceReceiver;
 	String emailIdOfServiceProvider;

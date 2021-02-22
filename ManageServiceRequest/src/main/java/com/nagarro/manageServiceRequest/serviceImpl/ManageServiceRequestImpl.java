@@ -5,13 +5,17 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.stereotype.Service;
 
 import com.nagarro.manageServiceRequest.common.ServiceRequestStatus;
 import com.nagarro.manageServiceRequest.entity.ServiceRequest;
 import com.nagarro.manageServiceRequest.service.CancelServiceRequest;
 import com.nagarro.manageServiceRequest.service.ManageServiceRequest;
-
+@Service
 public class ManageServiceRequestImpl implements ManageServiceRequest {
+	@Autowired 
+	private JmsTemplate jmsTemplate;
 	@Autowired
 	PendingServiceRequest pendingServiceRequest;
 	@Autowired
@@ -32,6 +36,8 @@ public class ManageServiceRequestImpl implements ManageServiceRequest {
 	@Override
 	public String createServiceRequest(ServiceRequest serviceRequest) {
 		serviceRequestList.add(serviceRequest);
+		System.out.println("Before JMS");
+		jmsTemplate.convertAndSend("ServiceRequestReceivedEvent", serviceRequest);
 		return serviceRequest.getId();
 	}
 
