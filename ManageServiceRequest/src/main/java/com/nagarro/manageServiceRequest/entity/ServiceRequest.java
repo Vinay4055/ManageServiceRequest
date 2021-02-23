@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ServiceRequest {
-	@NotEmpty(message = "ServiceRequestId is Mandatory")
+	@NotEmpty(message = "Service Request Id is Mandatory")
 	String id;
 	@NotEmpty(message = "ServiceId is Mandatory")
 	String serviceId;

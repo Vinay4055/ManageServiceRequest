@@ -9,8 +9,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ServiceRequest {
-	@NotEmpty(message = "ServiceRequestId is Mandatory")
-	String id;
+	@NotEmpty(message="Service Request Id is mandatory")
+	String id;//Coming in Model
 	@NotEmpty(message = "ServiceId is Mandatory")
 	String serviceId;
 	@NotEmpty(message = "Date is Mandatory")
@@ -20,4 +20,12 @@ public class ServiceRequest {
 	String emailIdOfServiceProvider;
 	String specialRequirement;
 	ServiceRequestStatus statusOfRequest;
+	@Override
+	public String toString() {
+		return "ServiceRequest [serviceId=" + serviceId + ", date=" + date + ", emailIdOfServiceReceiver="
+				+ emailIdOfServiceReceiver + ", emailIdOfServiceProvider=" + emailIdOfServiceProvider
+				+ ", specialRequirement=" + specialRequirement + ", statusOfRequest=" + statusOfRequest + "]";
+	}
+	
+	
 }

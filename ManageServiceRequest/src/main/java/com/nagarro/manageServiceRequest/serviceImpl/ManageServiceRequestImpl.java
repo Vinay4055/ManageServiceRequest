@@ -36,7 +36,6 @@ public class ManageServiceRequestImpl implements ManageServiceRequest {
 	@Override
 	public String createServiceRequest(ServiceRequest serviceRequest) {
 		serviceRequestList.add(serviceRequest);
-		System.out.println("Before JMS");
 		jmsTemplate.convertAndSend("ServiceRequestReceivedEvent", serviceRequest);
 		return serviceRequest.getId();
 	}
