@@ -13,7 +13,7 @@ public class InProcessServiceRequest implements CancelServiceRequest {
 	ManageServiceRequest manageServiceRequest;
 	@Override
 	public void cancelServiceRequest(String serviceId) {
-		ServiceRequest serviceRequest = manageServiceRequest.findService(serviceId);
+		ServiceRequest serviceRequest = manageServiceRequest.findServiceRequest(serviceId);
 		serviceRequest.setStatusOfRequest(ServiceRequestStatus.CANCEL);
 	}
 

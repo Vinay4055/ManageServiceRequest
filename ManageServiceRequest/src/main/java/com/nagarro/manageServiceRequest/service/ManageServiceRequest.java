@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import com.nagarro.manageServiceRequest.entity.ServiceRequest;
 @Service
 public interface ManageServiceRequest {
-	public String createServiceRequest(ServiceRequest serviceRequest); //returns serviceId for the service
-	public CancelServiceRequest getCancelRequestType(String serviceId);
-	public ServiceRequest findService(String serviceId);
+	public String createServiceRequest(ServiceRequest serviceRequest); //returns serviceRequestId for the service,Used to track the serviceRequest
+	public CancelServiceRequest getCancelRequestType(String serviceId);//returns the status of Request(PENDING,ACCEPTED,etc)
+	public ServiceRequest findServiceRequest(String serviceRequestId);
 }

@@ -19,15 +19,12 @@ public class CancelServiceRequestController {
 	ManageServiceRequest manageServiceRequest;
 	public CancelServiceRequest cancelServiceRequest;
 
-	@PutMapping("/cancel/{serviceId}")
-	public ResponseEntity<Void> cancelServiceRequest(@PathVariable(name = "serviceId") String serviceId,
-			BindingResult bindingResult) {
-		if (bindingResult.hasErrors()) {
-			return new ResponseEntity<Void>(HttpStatus.UNPROCESSABLE_ENTITY);
-		} else {
-			this.cancelServiceRequest = manageServiceRequest.getCancelRequestType(serviceId);
-			this.cancelServiceRequest.cancelServiceRequest(serviceId);
+	@PutMapping("/{serviceId}")
+	public ResponseEntity<Void> cancelServiceRequest(@PathVariable(name = "serviceId") String serviceRequestId) {
+		
+			this.cancelServiceRequest = manageServiceRequest.getCancelRequestType(serviceRequestId);
+			this.cancelServiceRequest.cancelServiceRequest(serviceRequestId);
 			return new ResponseEntity<Void>(HttpStatus.ACCEPTED);
-		}
+		
 	}
 }
