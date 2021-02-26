@@ -21,10 +21,12 @@ public class CancelServiceRequestController {
 
 	@PutMapping("/{serviceId}")
 	public ResponseEntity<Void> cancelServiceRequest(@PathVariable(name = "serviceId") String serviceRequestId) {
-		
-			this.cancelServiceRequest = manageServiceRequest.getCancelRequestType(serviceRequestId);
+			this.cancelServiceRequest = this.manageServiceRequest.getCancelRequestType(serviceRequestId);
+			if(this.cancelServiceRequest != null) {
 			this.cancelServiceRequest.cancelServiceRequest(serviceRequestId);
 			return new ResponseEntity<Void>(HttpStatus.ACCEPTED);
-		
+			}
+			else
+				return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
 	}
 }

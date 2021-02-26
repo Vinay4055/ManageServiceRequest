@@ -24,9 +24,10 @@ public class PendingServiceRequest implements CancelServiceRequest {
 	public void cancelServiceRequest(String serviceId) {
 		ServiceRequest serviceRequest = manageServiceRequest.findServiceRequest(serviceId);
 		serviceRequest.setStatusOfRequest(ServiceRequestStatus.CANCEL);
+		System.out.println("Before Event ");
 		jmsTemplate.convertAndSend("cancelServiceRequestFromAdmin", gson.toJson(serviceId));
 		jmsTemplate.convertAndSend("CancelServiceRequestFromServiceProvider", gson.toJson(serviceId));
-
+		System.out.println("After Event");
 	}
 
 }

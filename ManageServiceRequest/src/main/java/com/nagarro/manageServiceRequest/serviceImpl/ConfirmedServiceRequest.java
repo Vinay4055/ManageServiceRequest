@@ -14,13 +14,14 @@ public class ConfirmedServiceRequest implements CancelServiceRequest{
 	@Autowired
 	ManageServiceRequest manageServiceRequest;
 	@Autowired
-	JmsTemplate jmsTemplate;
-	
+	JmsTemplate jmsTemplate;	
 	@Autowired
 	Gson gson;
 	@Override
 	public void cancelServiceRequest(String serviceId) {
+		System.out.println("Manage Service Request = "+manageServiceRequest);
 		ServiceRequest serviceRequest = manageServiceRequest.findServiceRequest(serviceId);
+		System.out.println("Service Request = "+serviceRequest);
 		serviceRequest.setStatusOfRequest(ServiceRequestStatus.CANCEL);
 		jmsTemplate.convertAndSend("cancelServiceRequestFromAdmin", gson.toJson(serviceId));
 		jmsTemplate.convertAndSend("CancelServiceRequestFromServiceProvider", gson.toJson(serviceId));

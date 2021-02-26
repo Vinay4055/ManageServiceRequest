@@ -49,20 +49,27 @@ public class ManageServiceRequestImpl implements ManageServiceRequest {
 
 	@Override
 	public CancelServiceRequest getCancelRequestType(String serviceRequestId) {
+		System.out.println("Inside Function ");
+		System.out.println(findServiceRequest(serviceRequestId));
 		ServiceRequest serviceRequest = findServiceRequest(serviceRequestId);
-		ServiceRequestStatus status = serviceRequest.getStatusOfRequest();
-		switch (status) {
-		case PROCESSING:
-			return pendingServiceRequest;
-		case CONFIRMED:
-			return confirmedServiceRequest;
-		case PENDING:
-			return inProcessServiceRequest;
-		default:
-			return null;
+		if (serviceRequest != null) {
+			ServiceRequestStatus status = serviceRequest.getStatusOfRequest();
+			System.out.println("Status Of Request = " + status.toString());
+			switch (status) {
+			case PROCESSING:
+				return this.inProcessServiceRequest;
+			case CONFIRMED:
+				return this.confirmedServiceRequest;
+			case PENDING:
+				return this.pendingServiceRequest;
+			default:
+				return null;
 
-		}
+			}
+		} else
+			return null;
 	}
+
 	@JmsListener(destination = "ServiceRequestReceivedToAdmin")
 	public void serviceRequestReceivedByAdmin(String serviceRequestId) {
 		String serviceRequestIdObject = gson.fromJson(serviceRequestId, String.class);
@@ -78,6 +85,14 @@ public class ManageServiceRequestImpl implements ManageServiceRequest {
 		System.out.println(acceptServiceRequestResponseObject);
 		ServiceRequest serviceRequest = findServiceRequest(acceptServiceRequestResponseObject.getServiceRequestId());
 		serviceRequest.setStatusOfRequest(ServiceRequestStatus.CONFIRMED);
+	}
+
+	@Override
+	@JmsListener(destination = "ServiceRequestCancelledByServiceProviderEventForManageServiceRequest")
+	public void acceptCancelServiceRequestEventFromServiceProvider(String serviceRequestId) {
+		String serviceRequestIdObject = gson.fromJson(serviceRequestId, String.class);
+		ServiceRequest serviceRequest = findServiceRequest(serviceRequestIdObject);
+		serviceRequest.setStatusOfRequest(ServiceRequestStatus.CANCELLEDBYSERVICEPROVIDER);
 	}
 
 }
