@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.print.attribute.standard.Severity;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.jms.core.JmsTemplate;
@@ -13,6 +15,7 @@ import com.google.gson.Gson;
 import com.nagarro.manageServiceRequest.common.ServiceRequestStatus;
 import com.nagarro.manageServiceRequest.entity.ServiceRequest;
 import com.nagarro.manageServiceRequest.model.AcceptServiceRequestResponse;
+import com.nagarro.manageServiceRequest.model.ServiceProvider;
 import com.nagarro.manageServiceRequest.service.CancelServiceRequest;
 import com.nagarro.manageServiceRequest.service.ManageServiceRequest;
 
@@ -42,7 +45,9 @@ public class ManageServiceRequestImpl implements ManageServiceRequest {
 
 	@Override
 	public String createServiceRequest(ServiceRequest serviceRequest) {
+		System.out.println("Service Request created ");
 		serviceRequestList.add(serviceRequest);
+		System.out.println("Added Into List");
 		jmsTemplate.convertAndSend("ServiceRequestReceivedEvent", gson.toJson(serviceRequest));
 		return serviceRequest.getId();
 	}
@@ -70,6 +75,17 @@ public class ManageServiceRequestImpl implements ManageServiceRequest {
 			return null;
 	}
 
+	public void notifyServiceReceiver(ServiceProvider serviceProvider, String serviceRequestId) {
+		ServiceRequest serviceRequest = findServiceRequest(serviceRequestId);
+		System.out.println("Notification Sent To " + serviceRequest.getId() + "Having email address as "
+				+ serviceRequest.getEmailIdOfServiceReceiver());
+		System.out.println("Service Provider Details are :- ");
+		System.out.println("\tName = " + serviceProvider.getFirstName());
+		System.out.println("\tEmail = " + serviceProvider.getEmail());
+		System.out.println("\tContactDetails = " + serviceProvider.getTelePhone());
+
+	}
+
 	@JmsListener(destination = "ServiceRequestReceivedToAdmin")
 	public void serviceRequestReceivedByAdmin(String serviceRequestId) {
 		String serviceRequestIdObject = gson.fromJson(serviceRequestId, String.class);
@@ -79,12 +95,12 @@ public class ManageServiceRequestImpl implements ManageServiceRequest {
 
 	@JmsListener(destination = "RequestAcceptedByServiceProviderEventForManageServiceRequest")
 	public void requestAcceptedByServiceProvider(String acceptServiceRequestResponse) {
-		System.out.println("Message = " + acceptServiceRequestResponse);
 		AcceptServiceRequestResponse acceptServiceRequestResponseObject = gson.fromJson(acceptServiceRequestResponse,
 				AcceptServiceRequestResponse.class);
-		System.out.println(acceptServiceRequestResponseObject);
 		ServiceRequest serviceRequest = findServiceRequest(acceptServiceRequestResponseObject.getServiceRequestId());
 		serviceRequest.setStatusOfRequest(ServiceRequestStatus.CONFIRMED);
+		notifyServiceReceiver(acceptServiceRequestResponseObject.getServiceProvider(),
+				acceptServiceRequestResponseObject.getServiceRequestId());
 	}
 
 	@Override

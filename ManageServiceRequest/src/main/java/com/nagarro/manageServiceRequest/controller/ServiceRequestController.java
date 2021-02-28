@@ -42,7 +42,6 @@ public class ServiceRequestController {
 					.convertServiceRequestEntityToModel(manageServiceRequest.findServiceRequest(serviceRequestId));
 			return new ResponseEntity<ServiceRequest>(serviceRequest, HttpStatus.FOUND);
 		} else {
-			System.out.println("Inside Else");
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
 		}
